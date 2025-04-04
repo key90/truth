@@ -87,7 +87,7 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    
+
     canvas {
       position: fixed;
       top: 0;
@@ -105,37 +105,6 @@
   </style>
 </head>
 <body>
-<div id="startOverlay" style="
-  position: fixed;
-  z-index: 10000;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom right, #fce4ec, #ede7f6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  font-size: 1.5em;
-  color: #6a1b9a;
-  text-align: center;
-  padding: 20px;
-">
-  <p>нажми, чтобы начать волшебство 💖</p>
-  <button id="startButton" style="
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 1.1em;
-    background: #ba68c8;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  ">начать</button>
-</div>
-  
   <h1>Дарина, ты...</h1>
 
   <div id="final">
@@ -146,11 +115,9 @@
 
   <canvas id="canvas"></canvas>
 
-    <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_47084b5a62.mp3" type="audio/mp3">
-    Ваш браузер не поддерживает музыку.
-  </audio>
+ <audio id="bg-music" src="https://cdn.pixabay.com/audio/2022/03/15/audio_47084b5a62.mp3"></audio>
 
+  
   <script>
     const compliments = [...Array(100).keys()].map(i => `${i+1}. ` + [
       "невероятно умна", "излучаешь свет", "твоя улыбка лечит", "твои глаза как звёзды",
@@ -190,8 +157,8 @@
     ][i % 100]);
 
     const delay = 300;
-    const audio = document.getElementById("bgMusic");
-    audio.muted = false;
+    const audio = document.getElementById("bg-music");
+
 
     compliments.forEach((text, index) => {
       setTimeout(() => {
@@ -283,22 +250,6 @@
     });
 
     drawFireworks();
-
-const startOverlay = document.getElementById('startOverlay');
-const startButton = document.getElementById('startButton');
-const bgMusic = document.getElementById('bgMusic');
-
-startButton.addEventListener('click', () => {
-  startOverlay.style.display = 'none';
-  bgMusic.muted = false;
-  bgMusic.play().catch(e => {
-    console.log("Не удалось воспроизвести музыку: ", e);
-  });
-});
-
-
-
-    
   </script>
 </body>
 </html>
