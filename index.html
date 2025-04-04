@@ -160,121 +160,116 @@
       "твоя улыбка — чудо света", "ты та, кого ищут во снах"
     ][i % 100]);
 
-    const delay = 300;
-   const audio = document.getElementById("bgMusic");
+    
+  const delay = 300;
+  const audio = document.getElementById("bgMusic");
 
-function enableAudio() {
-  audio.muted = false;
-  const playPromise = audio.play();
-
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        // Музыка успешно проигрывается
-        console.log("Музыка включена!");
-      })
-      .catch((error) => {
-        console.warn("Ошибка воспроизведения:", error);
-      });
+  function enableAudio() {
+    audio.muted = false;
+    audio.volume = 0.4;
+    setTimeout(() => {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => console.log("Музыка играет"))
+          .catch(err => console.warn("Ошибка аудио:", err));
+      }
+    }, 200);
+    document.removeEventListener("click", enableAudio);
+    document.removeEventListener("touchstart", enableAudio);
   }
 
-  document.removeEventListener("click", enableAudio);
-  document.removeEventListener("touchstart", enableAudio);
-}
+  document.addEventListener("click", enableAudio);
+  document.addEventListener("touchstart", enableAudio);
 
-document.addEventListener("click", enableAudio);
-document.addEventListener("touchstart", enableAudio);
+  compliments.forEach((text, index) => {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "compliment";
+      el.textContent = text;
+      el.style.left = Math.random() * 80 + 10 + "%";
+      el.style.animationDuration = 5 + Math.random() * 4 + "s";
+      document.body.appendChild(el);
+      if (index === compliments.length - 1) {
+        setTimeout(() => {
+          document.getElementById("final").style.display = "block";
+          document.getElementById("fireworkButton").style.display = "block";
+        }, 7000);
+      }
+    }, index * delay);
+  });
 
-    compliments.forEach((text, index) => {
-      setTimeout(() => {
-        const el = document.createElement("div");
-        el.className = "compliment";
-        el.textContent = text;
-        el.style.left = Math.random() * 80 + 10 + "%";
-        el.style.animationDuration = 5 + Math.random() * 4 + "s";
-        document.body.appendChild(el);
-        if (index === compliments.length - 1) {
-          setTimeout(() => {
-            document.getElementById("final").style.display = "block";
-            document.getElementById("fireworkButton").style.display = "block";
-          }, 7000);
-        }
-      }, index * delay);
-    });
+  setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+  }, 400);
 
-    setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 10000);
-    }, 400);
+  // Fireworks
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
 
-    // Firework effect on button click
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+  window.addEventListener('resize', () => {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
+  });
 
-    window.addEventListener('resize', () => {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createFirework(x, y) {
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x, y,
+        vx: random(-5, 5),
+        vy: random(-5, 5),
+        alpha: 1,
+        radius: random(1, 3),
+        color: `hsl(${random(0, 360)}, 100%, 60%)`
+      });
+    }
+    return particles;
+  }
+
+  let fireworks = [];
+
+  function drawFireworks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fireworks.forEach(particles => {
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.01;
+      });
+    });
+    fireworks = fireworks.filter(particles => particles[0].alpha > 0);
+
+    fireworks.forEach(particles => {
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+        ctx.fill();
+      });
     });
 
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
+    requestAnimationFrame(drawFireworks);
+  }
+
+  document.getElementById("fireworkButton").addEventListener("click", () => {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        fireworks.push(createFirework(random(100, innerWidth - 100), random(100, innerHeight - 100)));
+      }, i * 400);
     }
+  });
 
-    function createFirework(x, y) {
-      const particles = [];
-      for (let i = 0; i < 50; i++) {
-        particles.push({
-          x, y,
-          vx: random(-5, 5),
-          vy: random(-5, 5),
-          alpha: 1,
-          radius: random(1, 3),
-          color: `hsl(${random(0, 360)}, 100%, 60%)`
-        });
-      }
-      return particles;
-    }
-
-    let fireworks = [];
-
-    function drawFireworks() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      fireworks.forEach(particles => {
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.alpha -= 0.01;
-        });
-      });
-      fireworks = fireworks.filter(particles => particles[0].alpha > 0);
-
-      fireworks.forEach(particles => {
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
-          ctx.fill();
-        });
-      });
-
-      requestAnimationFrame(drawFireworks);
-    }
-
-    document.getElementById("fireworkButton").addEventListener("click", () => {
-      for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-          fireworks.push(createFirework(random(100, innerWidth - 100), random(100, innerHeight - 100)));
-        }, i * 400);
-      }
-    });
-
-    drawFireworks();
-  </script>
-</body>
-</html>
+  drawFireworks();
+</script>
