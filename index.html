@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Дарина, ты...</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #fff0f5, #e6e6fa);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      margin-top: 30px;
+      color: #a64ac9;
+    }
+    .compliment {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2em;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      color: #5e239d;
+      animation: fall linear forwards;
+      white-space: nowrap;
+    }
+    @keyframes fall {
+      0% { top: -50px; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+    #final {
+      display: none;
+      text-align: center;
+      font-size: 1.8em;
+      color: #6b21a8;
+      font-weight: bold;
+      padding: 20px;
+      margin-top: 40px;
+      animation: fadeIn 2s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(-45deg);
+      animation: fallHeart linear infinite;
+    }
+    .heart:before, .heart:after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+    .heart:before { top: -10px; left: 0; }
+    .heart:after { left: 10px; top: 0; }
+
+    @keyframes fallHeart {
+      0% { top: -20px; opacity: 0.8; }
+      100% { top: 100vh; opacity: 0; }
+    }
+    audio {
+      display: none;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2em; }
+      .compliment { font-size: 1em; }
+      #final { font-size: 1.3em; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Дарина, ты...</h1>
+  <div id="final">
+    и даже больше... 101. ты — вдохновение, от которого мир становится добрее, светлее и красивее. просто потому, что ты в нём есть
+  </div>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_47084b5a62.mp3" type="audio/mp3">
+    Ваш браузер не поддерживает воспроизведение музыки.
+  </audio>
+
+  <script>
+    const compliments = [
+      "1. невероятно умна", "2. излучаешь свет", "3. твоя улыбка лечит", "4. твои глаза как звёзды",
+      "5. мягкая, как облачко", "6. по-настоящему добрая", "7. делаешь этот мир лучше", "8. искренне прекрасна",
+      "9. у тебя огромное сердце", "10. волшебная во всём", "11. красота внутри и снаружи",
+      "12. как луч солнца в пасмурный день", "13. заботливая и чуткая", "14. харизматична и утончённа",
+      "15. вдохновляешь собой", "16. у тебя невероятная энергия", "17. талантлива от природы",
+      "18. голос как музыка", "19. умеешь слушать сердцем", "20. настоящая леди", "21. благородна и нежна",
+      "22. любишь с душой", "23. всегда знаешь, что сказать", "24. у тебя глаза вселенной",
+      "25. ароматная, как весна", "26. мечтаешь — и заставляешь мечтать", "27. будто из книги сказок",
+      "28. твой смех — как мелодия", "29. умеешь вдохновлять других", "30. загадочна и тёплая",
+      "31. грациозна в каждом движении", "32. душевная и светлая", "33. твои слова лечат",
+      "34. сияешь изнутри", "35. как тёплый чай в холодный вечер", "36. у тебя душа художника",
+      "37. твоя доброта бесконечна", "38. ты всегда настоящая", "39. как утро без будильника",
+      "40. удивляешь каждый раз", "41. нежна, как перышко", "42. настоящая волшебница",
+      "43. твой взгляд окрыляет", "44. мудра не по годам", "45. ты уют", "46. вдохновляешь быть лучше",
+      "47. доброта — твоя суперсила", "48. твоя искренность обезоруживает", "49. как лепесток сакуры",
+      "50. ты настоящая муза", "51. в тебе столько тепла", "52. чувствуешь тонко и точно",
+      "53. даришь покой и радость", "54. в тебе красота и душа", "55. гармония в человеческом обличье",
+      "56. делаешь мир мягче", "57. как утренний рассвет", "58. ты — спокойствие в шуме",
+      "59. в тебе поэзия", "60. твоя доброта заразительна", "61. нежная и стойкая",
+      "62. как шоколад: сладкая и тёплая", "63. луч света в любой комнате",
+      "64. умеешь любить по-настоящему", "65. как объятие в словах", "66. чиста, как роса",
+      "67. твоя честность вдохновляет", "68. невероятная в каждом проявлении",
+      "69. каждый день с тобой — подарок", "70. ты чудо", "71. твои глаза умеют говорить",
+      "72. хрупкая и сильная одновременно", "73. ты словно кино без паузы", "74. настоящая звезда",
+      "75. с тобой хочется быть лучше", "76. твоя красота не требует слов",
+      "77. ум и доброта — твоё оружие", "78. ты умеешь быть тишиной", "79. твой смех лечит",
+      "80. ты как музыка без слов", "81. твоя душа танцует", "82. невероятно светлая",
+      "83. ты теплее одеяла", "84. сама нежность", "85. всегда особенная", "86. ты праздник",
+      "87. согреваешь взглядом", "88. как магия в реальности", "89. обнимаешь словами",
+      "90. ты как песня, которую не забыть", "91. просто космос", "92. ты центр Вселенной",
+      "93. у тебя душа-океан", "94. ты будто из другой сказочной вселенной",
+      "95. каждый твой день — вдохновение", "96. твоя мягкость — сила",
+      "97. ты словно дыхание весны", "98. тебя невозможно забыть",
+      "99. твоя любовь — как солнце", "100. ты та, кого ищут во снах"
+    ];
+
+    const delay = 300;
+
+    compliments.forEach((text, index) => {
+      setTimeout(() => {
+        const el = document.createElement("div");
+        el.className = "compliment";
+        el.textContent = text;
+        el.style.left = Math.random() * 80 + 10 + "%";
+        el.style.animationDuration = 5 + Math.random() * 4 + "s";
+        document.body.appendChild(el);
+
+        if (index === compliments.length - 1) {
+          setTimeout(() => {
+            document.getElementById("final").style.display = "block";
+          }, 7000);
+        }
+      }, index * delay);
+    });
+
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }, 500);
+  </script>
+</body>
+</html>
