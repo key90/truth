@@ -87,25 +87,6 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-
-    #musicBtn {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 20px;
-  font-size: 1.1em;
-  border: none;
-  border-radius: 10px;
-  background: #a29bfe;
-  color: white;
-  cursor: pointer;
-  z-index: 999;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-#musicBtn:hover {
-  background: #7c6ff1;
-}
     
     canvas {
       position: fixed;
@@ -124,7 +105,36 @@
   </style>
 </head>
 <body>
-  <button id="musicBtn">нажми!</button>
+<div id="startOverlay" style="
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom right, #fce4ec, #ede7f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 1.5em;
+  color: #6a1b9a;
+  text-align: center;
+  padding: 20px;
+">
+  <p>нажми, чтобы начать волшебство 💖</p>
+  <button id="startButton" style="
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    background: #ba68c8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  ">начать</button>
+</div>
   
   <h1>Дарина, ты...</h1>
 
@@ -274,12 +284,16 @@
 
     drawFireworks();
 
-    document.getElementById("musicBtn").addEventListener("click", () => {
-  const audio = document.getElementById("bgMusic");
-  audio.muted = false;
-  audio.volume = 0.5;
-  audio.play().catch(() => alert("Не удалось воспроизвести аудио 😢"));
-  document.getElementById("musicBtn").style.display = "none";
+const startOverlay = document.getElementById('startOverlay');
+const startButton = document.getElementById('startButton');
+const bgMusic = document.getElementById('bgMusic');
+
+startButton.addEventListener('click', () => {
+  startOverlay.style.display = 'none';
+  bgMusic.muted = false;
+  bgMusic.play().catch(e => {
+    console.log("Не удалось воспроизвести музыку: ", e);
+  });
 });
 
     
