@@ -161,11 +161,23 @@
     ][i % 100]);
 
     const delay = 300;
-    const audio = document.getElementById("bgMusic");
-    audio.muted = false;
-    function enableAudio() {
+   const audio = document.getElementById("bgMusic");
+
+function enableAudio() {
   audio.muted = false;
-  audio.play();
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        // Музыка успешно проигрывается
+        console.log("Музыка включена!");
+      })
+      .catch((error) => {
+        console.warn("Ошибка воспроизведения:", error);
+      });
+  }
+
   document.removeEventListener("click", enableAudio);
   document.removeEventListener("touchstart", enableAudio);
 }
