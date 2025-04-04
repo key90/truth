@@ -19,7 +19,7 @@
       color: #a64ac9;
     }
     .compliment {
-      position: absolute;
+      position: fixed;
       left: 50%;
       transform: translateX(-50%);
       font-size: 1.2em;
@@ -30,6 +30,8 @@
       color: #5e239d;
       animation: fall linear forwards;
       white-space: nowrap;
+      pointer-events: none; /* чтобы они не мешали нажатию */
+      z-index: 10;
     }
     @keyframes fall {
       0% { top: -50px; opacity: 0; }
@@ -115,9 +117,11 @@
 
   <canvas id="canvas"></canvas>
 
-    <audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-romantic.mp3"></audio>
+  <audio id="bgMusic" autoplay muted loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_47084b5a62.mp3" type="audio/mp3">
+    Ваш браузер не поддерживает музыку.
+  </audio>
 
-  
   <script>
     const compliments = [...Array(100).keys()].map(i => `${i+1}. ` + [
       "невероятно умна", "излучаешь свет", "твоя улыбка лечит", "твои глаза как звёзды",
@@ -157,8 +161,8 @@
     ][i % 100]);
 
     const delay = 300;
-    const audio = document.getElementById("bg-music");
-
+    const audio = document.getElementById("bgMusic");
+    audio.muted = false;
 
     compliments.forEach((text, index) => {
       setTimeout(() => {
